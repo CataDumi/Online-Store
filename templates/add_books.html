@@ -1,0 +1,103 @@
+{% include "header.html" %}
+
+<!-- Page Header -->
+<header class="masthead" style="background-image: url('{{ url_for('static', filename='img/books.jpg')}}')">
+    <div class="overlay"></div>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-md-10 mx-auto">
+                <div class="page-heading">
+                    <h1>Items</h1>
+                    <span class="subheading">Items</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Main Content -->
+<div class="container">
+    <div class="row">
+        <div class="col-lg-8 col-md-10 mx-auto">
+            <p>
+                Add some words for the add books section
+            </p>
+
+            <form name="sentMessage" id="contactForm" novalidate method="POST">
+
+
+                <div class="control-group">
+                    <div class="form-group floating-label-form-group controls">
+                        <label>Book Name</label>
+                        <input type="text" class="form-control" placeholder="Book Name" id="name" name="name" required
+                               data-validation-required-message="Please enter your email address.">
+                        <p class="help-block text-danger"></p>
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <div class="form-group col-xs-12 floating-label-form-group controls">
+                        <label>Author</label>
+                        <input type="text" class="form-control" placeholder="Author" id="author" name="author" required
+                               data-validation-required-message="Please enter your phone number.">
+                        <p class="help-block text-danger"></p>
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <div class="form-group col-xs-12 floating-label-form-group controls">
+                        <label>Quantity Availability</label>
+                        <input type="text" class="form-control" placeholder="Quantity Availability" id="quantity" name="quantity"
+                               required data-validation-required-message="Please enter your phone number.">
+                        <p class="help-block text-danger"></p>
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <div class="form-group col-xs-12 floating-label-form-group controls">
+                        <label>Price</label>
+                        <input type="text" class="form-control" placeholder="Price per book" id="price" name="price" required
+                               data-validation-required-message="Please enter your phone number.">
+                        <p class="help-block text-danger"></p>
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <div class="form-group col-xs-12 floating-label-form-group controls">
+                        <label>Rating</label>
+                        <input type="text" class="form-control" placeholder="Rating" id="rating" name="rating" required
+                               data-validation-required-message="Please enter your phone number.">
+                        <p class="help-block text-danger"></p>
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <div class="form-group col-xs-12 floating-label-form-group controls">
+                        <label>Book Cover URL</label>
+                        <input type="text" class="form-control" placeholder="Book Cover URL" id="url" name="url" required
+                               data-validation-required-message="Please enter your phone number.">
+                        <p class="help-block text-danger"></p>
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <div class="form-group floating-label-form-group controls">
+                        <label>Short description</label>
+                        <textarea rows="5" class="form-control" placeholder="Description of the book" id="description" name="description"
+                                  required data-validation-required-message="Please enter a message."></textarea>
+                        <p class="help-block text-danger"></p>
+                    </div>
+                </div>
+
+
+                <br>
+                <div id="success"></div>
+                    <button type="submit" class="btn btn-primary" id="sendMessageButton" >Send</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<hr>
+
+{% include "footer.html" %}

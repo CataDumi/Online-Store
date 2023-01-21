@@ -1,0 +1,51 @@
+{% extends 'bootstrap/base.html' %}
+
+{% block content %}
+{% include "header.html" %}
+<!-- Page Header -->
+<header class="masthead" style="background-image: url('{{ url_for('static', filename='img/edit-bg.jpg')}}')">
+    <div class="overlay"></div>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-md-10 mx-auto">
+                <div class="page-heading">
+                    <h1>Catalogue</h1>
+                    <span class="subheading">A large variety of items</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Main Content -->
+<div class="container">
+    <div class="row">
+        <div class="col-lg-8 col-md-10 mx-auto">
+            {% for item in content %}
+            <div class="post-preview">
+                <h2 class="post-title">
+                    Book name: {{item.name}}
+                </h2>
+                <h3 class="post-subtitle">
+                    Author name: {{item.author}}
+                </h3>
+                </a>
+                <p class="post-meta">Quantity available
+                    <a href="#">{{item.quantity}}</a>
+                    on date {{date}}</p>
+                <p class="post-meta">Price: {{item.price}} Eur</p>
+                <p class="post-meta">Rating: {{item.rating}}/5</p>
+                <p class="post-meta">Description: {{item.description}}</p>
+                <a href="{{url_for('delete_book')}}">Delete book</a>
+                <br>
+                <a href="/about">Edit book</a>
+            </div>
+            <hr>
+            {% endfor %}
+
+        </div>
+    </div>
+</div>
+
+{% include "footer.html" %}
+{% endblock %}

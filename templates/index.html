@@ -1,0 +1,58 @@
+{% include "header.html" %}
+
+<!-- Page Header -->
+<header class="masthead"
+        style="background-image: url('https://www.washingtonian.com/wp-content/uploads/2022/07/OldTownBooks-310-2048x1365.jpg')">
+    <div class="overlay"></div>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-md-10 mx-auto">
+                <div class="site-heading">
+                    <h1>Collection</h1>
+                    <span class="subheading">A collection of random books.</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Main Content -->
+<div class="container">
+    <div class="row">
+        <div class="col-lg-8 col-md-10 mx-auto">
+            {% for item in content %}
+            <div class="post-preview">
+                <h2 class="post-title">
+                    Book name: {{item.name}}
+                </h2>
+                <h3 class="post-subtitle">
+                    Author name: {{item.author}}
+                </h3>
+                </a>
+                <p class="post-meta">Quantity available
+                    <a href="#">{{item.quantity}}</a>
+                    on date {{date}}</p>
+                <p class="post-meta">Price: {{item.price}} Eur</p>
+                <p class="post-meta">Rating: {{item.rating}}/5</p>
+                <p class="post-meta">Description: {{item.description}}</p>
+                <a href="{{url_for('delete_book'),1}}">Delete book</a>
+                <br>
+                <a href="/about">Edit book</a>
+            </div>
+            <hr>
+            {% endfor %}
+
+
+            <!-- Buttons -->
+            <div class="clearfix">
+                <a class="btn btn-primary float-right " href="/catalogue">View catalogue</a>
+                <a class="btn btn-primary float-right mr-5" href="/add_books">Add books</a>
+                <a class="btn btn-primary float-right mr-5" href="/">New pg</a>
+            </div>
+
+        </div>
+    </div>
+</div>
+<hr>
+
+{% include "footer.html" %}
