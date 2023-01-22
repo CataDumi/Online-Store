@@ -30,15 +30,15 @@
                     Author name: {{item.author}}
                 </h3>
                 </a>
-                <p class="post-meta">Quantity available
+                <p class="post-meta">Quantity available:
                     <a href="#">{{item.quantity}}</a>
                     on date {{date}}</p>
                 <p class="post-meta">Price: {{item.price}} Eur</p>
                 <p class="post-meta">Rating: {{item.rating}}/5</p>
                 <p class="post-meta">Description: {{item.description}}</p>
-                <a href="{{url_for('delete_book')}}">Delete book</a>
+                <a href="{{url_for('delete_book',id=item.id)}}">Delete book</a>
                 <br>
-                <a href="/about">Edit book</a>
+                <a href="{{url_for('edit',id=item.id)}}">Edit book</a>
             </div>
             <hr>
             {% endfor %}
