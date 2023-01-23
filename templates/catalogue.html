@@ -1,9 +1,10 @@
-{% extends 'bootstrap/base.html' %}
-
+{% import "bootstrap/wtf.html" as wtf %}
 {% block content %}
 {% include "header.html" %}
+
+
 <!-- Page Header -->
-<header class="masthead" style="background-image: url('{{ url_for('static', filename='img/edit-bg.jpg')}}')">
+<header class="masthead" style="background-image: url('{{ url_for('static', filename='img/catalogue.jpg')}}')">
     <div class="overlay"></div>
     <div class="container">
         <div class="row">
@@ -22,6 +23,8 @@
     <div class="row">
         <div class="col-lg-8 col-md-10 mx-auto">
             {% for item in content %}
+            <div> <img src="{{item.url}}" width="25%" height="25% " ></div>
+            <br>
             <div class="post-preview">
                 <h2 class="post-title">
                     Book name: {{item.name}}
@@ -44,6 +47,7 @@
             {% endfor %}
 
         </div>
+
     </div>
 </div>
 
