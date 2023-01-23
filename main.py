@@ -5,6 +5,8 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_ckeditor import CKEditor, CKEditorField
 from datetime import datetime
 from forms import EditForm, RegisterForm, LoginForm
+from werkzeug.security import generate_password_hash,check_password_hash
+
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = '8BYkEfBA6O6donzWlSihBXox7C0sKR6b'
@@ -12,7 +14,7 @@ ckeditor = CKEditor(app)
 Bootstrap(app)
 
 ##CONNECT TO DB
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///books.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///store.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 app.app_context().push()
@@ -55,10 +57,16 @@ def get_all_posts():
 def register_user():
     register_user_form = RegisterForm()
     if request.method == 'POST':
-        if register_user_form.validate_on_submit():
+        if register_user_form.validate_on_submit() and \
+                register_user_form.password.data==register_user_form.password_confirmation.data: #match both passwords
+            # hash password
+            print(register_user_form.password.data)
+
+            hash_password=generate_password_hash(password=register_user_form.password.data,method='pbkdf2:sha256',salt_length=8)
+            # print(hash_password)
             new_user = User(name=register_user_form.name.data,
                             email=register_user_form.email.data,
-                            password=register_user_form.password.data)
+                            password=hash_password)
             db.session.add(new_user)
             db.session.commit()
             return redirect(url_for('catalogue'))
@@ -68,12 +76,16 @@ def register_user():
 def login():
     login_form=LoginForm()
     if request.method=="POST":
-        print(login_form.email.data)
-        print(login_form.password.data)
-        if User.query.filter_by(email=login_form.email.data).first():
-            return redirect(url_for('catalogue'))
-        else:
-            return redirect(url_for('register_user'))
+        #search for the account
+        if User.query.filter_by(email=str(login_form.email.data)).first() :
+            #if the account exists
+            user_to_login=User.query.filter_by(email=login_form.email.data).first()
+
+            #checking for password
+            if check_password_hash(pwhash=user_to_login.password,password=login_form.password.data):
+                return redirect(url_for('catalogue'))
+            else:
+                return redirect(url_for('register_user'))
     return render_template('login.html',form=login_form)
 
 
@@ -91,7 +103,6 @@ def edit(id):
         edit_form.price.data = book_to_edit.price
         edit_form.rating.data = book_to_edit.rating
         edit_form.url.data = book_to_edit.url
-        print(edit_form.url.data)
         edit_form.description.data = book_to_edit.description
         return render_template('edit.html', form=edit_form)
 
