@@ -1,5 +1,5 @@
 import requests.cookies
-from flask import Flask, render_template, redirect, url_for, request
+from flask import Flask, render_template, redirect, url_for, request,flash
 from flask_bootstrap import Bootstrap
 from flask_sqlalchemy import SQLAlchemy
 from flask_ckeditor import CKEditor, CKEditorField
@@ -35,7 +35,7 @@ class Books(db.Model):
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(250))
-    email = db.Column(db.String(250))
+    email = db.Column(db.String(250),unique=True)
     password = db.Column(db.String(250))
 
 
@@ -50,14 +50,21 @@ db.create_all()
 def get_all_posts():
     if request.method == 'GET':
         preview = db.session.query(Books).all()[:2]  # ca sa vad doar primele cateva carti
+    flash('You were successfully logged in')
     return render_template("index.html", content=preview, date=datetime.now().strftime("%d/%m/%Y"))
 
 
 @app.route('/register', methods=['GET', 'POST'])
 def register_user():
+    error=None
     register_user_form = RegisterForm()
     if request.method == 'POST':
-        if register_user_form.validate_on_submit() and \
+        #checking for email if already exists
+        if User.query.filter_by(email=register_user_form.email.data).first():
+            error = 'Email already used. Try a new email address.'
+            return render_template('register.html', form=register_user_form, error=error)
+
+        elif register_user_form.validate_on_submit() and \
                 register_user_form.password.data==register_user_form.password_confirmation.data: #match both passwords
             # hash password
             print(register_user_form.password.data)
@@ -70,22 +77,30 @@ def register_user():
             db.session.add(new_user)
             db.session.commit()
             return redirect(url_for('catalogue'))
+
     return render_template('register.html', form=register_user_form)
 
 @app.route('/login',methods=['GET','POST'])
 def login():
+
     login_form=LoginForm()
     if request.method=="POST":
         #search for the account
         if User.query.filter_by(email=str(login_form.email.data)).first() :
-            #if the account exists
+            #if the account is registered
             user_to_login=User.query.filter_by(email=login_form.email.data).first()
 
             #checking for password
             if check_password_hash(pwhash=user_to_login.password,password=login_form.password.data):
+                flash('You were successfully logged in!')
                 return redirect(url_for('catalogue'))
             else:
-                return redirect(url_for('register_user'))
+                error='Invalid password,please try again.'
+                return render_template('login.html',error=error,form=login_form)
+        else:
+            error="That email does not exist, please try again."
+            return render_template('login.html',error=error,form=login_form)
+
     return render_template('login.html',form=login_form)
 
 

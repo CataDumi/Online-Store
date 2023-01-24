@@ -9,6 +9,7 @@
                 <div class="page-heading">
                     <h1>Welcome back !</h1>
                     <span class="subheading">Log in and look after your favorite novels.</span>
+
                 </div>
 
             </div>
@@ -22,6 +23,11 @@
     <div class="row">
         <div class="col-lg-8 col-md-10 mx-auto">
             <p>Want to search for your fav books ? Register using the form below!</p>
+
+
+            {% if error %}
+    <p class=error , style="text-align:center;  color: red"><strong>Error:</strong> {{ error }}
+  {% endif %}
             {{ wtf.quick_form(form, button_map={"submit": "primary"}, novalidate=False) }}
 
 

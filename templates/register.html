@@ -19,6 +19,22 @@
 
 <!-- Main Content -->
 <div class="container">
+
+    {% if error %}
+    <p class=error , style="text-align:center;  color: red"><strong>Error:</strong> {{ error }}
+        {% endif %}
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+
+
+    <ul class=flashes>
+        {% for message in messages %}
+        <li>{{ message }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+    {% endwith %}
+
     <div class="row">
         <div class="col-lg-8 col-md-10 mx-auto">
             <p>Want to search for your fav books ? Register using the form below!</p>
