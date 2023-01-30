@@ -6,6 +6,7 @@ from flask_ckeditor import CKEditor, CKEditorField
 from datetime import datetime
 from forms import EditForm, RegisterForm, LoginForm
 from werkzeug.security import generate_password_hash,check_password_hash
+from flask_login import LoginManager,UserMixin,login_user, login_required, current_user, logout_user
 
 
 app = Flask(__name__)
@@ -32,7 +33,7 @@ class Books(db.Model):
     description = db.Column(db.String(250))
 
 
-class User(db.Model):
+class User(db.Model,UserMixin):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(250))
     email = db.Column(db.String(250),unique=True)
@@ -41,6 +42,14 @@ class User(db.Model):
 
 db.create_all()
 
+login_manager=LoginManager()
+login_manager.init_app(app)
+
+@login_manager.user_loader
+def load_user(user_id):
+    print(f'User id to load: {User.query.get(int(user_id))}')
+
+    return User.query.get(int(user_id))
 
 #################################################                         ################################################################
 #################################################                         ################################################################
@@ -51,6 +60,8 @@ def get_all_posts():
     if request.method == 'GET':
         preview = db.session.query(Books).all()[:2]  # ca sa vad doar primele cateva carti
     flash('You were successfully logged in')
+    print(f'Logged in user ? {current_user.is_authenticated}')
+    print(f'Current user: {current_user}')
     return render_template("index.html", content=preview, date=datetime.now().strftime("%d/%m/%Y"))
 
 
@@ -76,6 +87,9 @@ def register_user():
                             password=hash_password)
             db.session.add(new_user)
             db.session.commit()
+
+            # Log in and authenticate user after adding details to database
+            login_user(new_user)
             return redirect(url_for('catalogue'))
 
     return render_template('register.html', form=register_user_form)
@@ -93,6 +107,11 @@ def login():
             #checking for password
             if check_password_hash(pwhash=user_to_login.password,password=login_form.password.data):
                 flash('You were successfully logged in!')
+
+
+                # Log in and authenticate user
+                login_user(user_to_login)
+                print(f"Current user: {current_user, current_user.id, current_user.name}")
                 return redirect(url_for('catalogue'))
             else:
                 error='Invalid password,please try again.'
@@ -105,8 +124,10 @@ def login():
 
 
 @app.route('/edit/<int:id>', methods=["GET", "POST"])
+@login_required
 def edit(id):
     edit_form = EditForm()
+    print('No')
 
     if request.method == 'GET':
         ###aici identific cartea din db si ii preiau caracteristicile pt editare
@@ -165,8 +186,6 @@ def catalogue():
 @app.route('/add_books', methods=['POST', "GET"])
 def add_books():
     if request.method == 'POST':
-        print('yas')
-
         # aici vad tot ce se da add din add books
         # print(request.form['name'])
         # print(request.form['author'])
@@ -201,6 +220,11 @@ def about():
 @app.route("/contact")
 def contact():
     return render_template("contact.html")
+
+@app.route('/logout')
+def logout():
+    logout_user()
+    return redirect(url_for('get_all_posts'))
 
 
 if __name__ == "__main__":
