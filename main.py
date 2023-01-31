@@ -1,13 +1,12 @@
 import requests.cookies
-from flask import Flask, render_template, redirect, url_for, request,flash
+from flask import Flask, render_template, redirect, url_for, request, flash
 from flask_bootstrap import Bootstrap
 from flask_sqlalchemy import SQLAlchemy
 from flask_ckeditor import CKEditor, CKEditorField
 from datetime import datetime
 from forms import EditForm, RegisterForm, LoginForm
-from werkzeug.security import generate_password_hash,check_password_hash
-from flask_login import LoginManager,UserMixin,login_user, login_required, current_user, logout_user
-
+from werkzeug.security import generate_password_hash, check_password_hash
+from flask_login import LoginManager, UserMixin, login_user, login_required, current_user, logout_user
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = '8BYkEfBA6O6donzWlSihBXox7C0sKR6b'
@@ -33,23 +32,25 @@ class Books(db.Model):
     description = db.Column(db.String(250))
 
 
-class User(db.Model,UserMixin):
+class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(250))
-    email = db.Column(db.String(250),unique=True)
+    email = db.Column(db.String(250), unique=True)
     password = db.Column(db.String(250))
 
 
 db.create_all()
 
-login_manager=LoginManager()
+login_manager = LoginManager()
 login_manager.init_app(app)
+
 
 @login_manager.user_loader
 def load_user(user_id):
-    print(f'User id to load: {User.query.get(int(user_id))}')
+    # print(f'User id to load: {User.query.get(int(user_id))}')
 
     return User.query.get(int(user_id))
+
 
 #################################################                         ################################################################
 #################################################                         ################################################################
@@ -67,20 +68,21 @@ def get_all_posts():
 
 @app.route('/register', methods=['GET', 'POST'])
 def register_user():
-    error=None
+    error = None
     register_user_form = RegisterForm()
     if request.method == 'POST':
-        #checking for email if already exists
+        # checking for email if already exists
         if User.query.filter_by(email=register_user_form.email.data).first():
             error = 'Email already used. Try a new email address.'
             return render_template('register.html', form=register_user_form, error=error)
 
         elif register_user_form.validate_on_submit() and \
-                register_user_form.password.data==register_user_form.password_confirmation.data: #match both passwords
+                register_user_form.password.data == register_user_form.password_confirmation.data:  # match both passwords
             # hash password
             print(register_user_form.password.data)
 
-            hash_password=generate_password_hash(password=register_user_form.password.data,method='pbkdf2:sha256',salt_length=8)
+            hash_password = generate_password_hash(password=register_user_form.password.data, method='pbkdf2:sha256',
+                                                   salt_length=8)
             # print(hash_password)
             new_user = User(name=register_user_form.name.data,
                             email=register_user_form.email.data,
@@ -94,33 +96,32 @@ def register_user():
 
     return render_template('register.html', form=register_user_form)
 
-@app.route('/login',methods=['GET','POST'])
+
+@app.route('/login', methods=['GET', 'POST'])
 def login():
+    login_form = LoginForm()
+    if request.method == "POST":
+        # search for the account
+        if User.query.filter_by(email=str(login_form.email.data)).first():
+            # if the account is registered
+            user_to_login = User.query.filter_by(email=login_form.email.data).first()
 
-    login_form=LoginForm()
-    if request.method=="POST":
-        #search for the account
-        if User.query.filter_by(email=str(login_form.email.data)).first() :
-            #if the account is registered
-            user_to_login=User.query.filter_by(email=login_form.email.data).first()
-
-            #checking for password
-            if check_password_hash(pwhash=user_to_login.password,password=login_form.password.data):
+            # checking for password
+            if check_password_hash(pwhash=user_to_login.password, password=login_form.password.data):
                 flash('You were successfully logged in!')
-
 
                 # Log in and authenticate user
                 login_user(user_to_login)
                 print(f"Current user: {current_user, current_user.id, current_user.name}")
                 return redirect(url_for('catalogue'))
             else:
-                error='Invalid password,please try again.'
-                return render_template('login.html',error=error,form=login_form)
+                error = 'Invalid password,please try again.'
+                return render_template('login.html', error=error, form=login_form)
         else:
-            error="That email does not exist, please try again."
-            return render_template('login.html',error=error,form=login_form)
+            error = "That email does not exist, please try again."
+            return render_template('login.html', error=error, form=login_form)
 
-    return render_template('login.html',form=login_form)
+    return render_template('login.html', form=login_form)
 
 
 @app.route('/edit/<int:id>', methods=["GET", "POST"])
@@ -221,10 +222,34 @@ def about():
 def contact():
     return render_template("contact.html")
 
+
 @app.route('/logout')
 def logout():
     logout_user()
     return redirect(url_for('get_all_posts'))
+
+
+shop_cart = []
+
+
+@app.route('/add_item/<int:id>')
+def add_to_cart(id):
+    print('Item added')
+    print(f'Item id: {id}')
+    item_to_add = Books.query.filter_by(id=id).first()
+    print(item_to_add.name)
+    shop_cart.append(item_to_add)
+    print(f'Cart items: {shop_cart}\t Total: {len(shop_cart)}')
+    return redirect(url_for('catalogue'))
+
+
+@app.route('/cart')
+@login_required
+def cart_page():
+    print(shop_cart)
+    for item in shop_cart:
+        print(item.name)
+    return render_template('cart_page.html',cart=shop_cart)
 
 
 if __name__ == "__main__":

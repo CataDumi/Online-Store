@@ -1,0 +1,64 @@
+{% import "bootstrap/wtf.html" as wtf %}
+{% block content %}
+{% include "header.html" %}
+
+
+<!-- Page Header -->
+<header class="masthead" style="background-image: url('{{ url_for('static', filename='img/catalogue.jpg')}}')">
+    <div class="overlay"></div>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-md-10 mx-auto">
+                <div class="page-heading">
+                    <h1>Catalogue</h1>
+                    <span class="subheading">A large variety of items</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Main Content -->
+{% with messages = get_flashed_messages() %}
+{% if messages %}
+<ul class=flashes>
+    {% for message in messages %}
+    <p style="text-align:center">{{ message }}</p>
+    {% endfor %}
+</ul>
+{% endif %}
+{% endwith %}
+<div class="container">
+
+
+    {% for item in cart %}
+    <br>
+    <div class="row">
+        <div style="display: flex" class="col-lg-8 col-md-10 mx-auto">
+
+            <div style="width: 20%; float:left  ">
+                <img src="{{item.url}}" width="70%" height="100% "></div>
+
+            <div style="width: 50%; float:right" class="post-preview">
+                <h2 style="font-size: 80%;" class="post-title">
+                    Book name: {{item.name}}
+                </h2>
+                <h3 style="font-size: 80%;" class="post-subtitle">
+                    Author name: {{item.author}}
+                </h3>
+                <p style="font-size: 80%;" class="post-meta">Description: {{item.description}}</p>
+            </div>
+
+            <div style="width: 20%; float:left  ">
+                <p style="font-size: 80%;" class="post-meta"><em><strong>Price: {{item.price}} Eur</strong></em></p></div>
+
+        </div>
+    </div>
+    <hr>
+    {% endfor %}
+
+
+</div>
+
+{% include "footer.html" %}
+{% endblock %}
