@@ -19,46 +19,90 @@
 </header>
 
 <!-- Main Content -->
-{% with messages = get_flashed_messages() %}
-{% if messages %}
-<ul class=flashes>
-    {% for message in messages %}
-    <p style="text-align:center">{{ message }}</p>
-    {% endfor %}
-</ul>
-{% endif %}
-{% endwith %}
-<div class="container">
+{% if not num_of_products==0: %}
+<section style="display: flex">
 
 
-    {% for item in cart %}
-    <br>
-    <div class="row">
-        <div style="display: flex" class="col-lg-8 col-md-10 mx-auto">
+    <section style="float: left;overflow:hidden ;margin:40px;;" class="left">
+        <div class="container">
 
-            <div style="width: 20%; float:left  ">
-                <img src="{{item.url}}" width="70%" height="100% "></div>
 
-            <div style="width: 50%; float:right" class="post-preview">
-                <h2 style="font-size: 80%;" class="post-title">
-                    Book name: {{item.name}}
-                </h2>
-                <h3 style="font-size: 80%;" class="post-subtitle">
-                    Author name: {{item.author}}
-                </h3>
-                <p style="font-size: 80%;" class="post-meta">Description: {{item.description}}</p>
+            {% for item in cart %}
+            <br>
+            <div class="row">
+                <div style="display: flex" class="col-lg-8 col-md-10 mx-auto">
+
+                    <div style="width: 20%; float:left  ">
+                        <img src="{{item.url}}" width="70%" height=175px></div>
+
+                    <div style="width: 50%; float:right" class="post-preview">
+                        <h2 style="font-size: 80%;" class="post-title">
+                            Book name: {{item.name}}
+                        </h2>
+                        <h3 style="font-size: 80%;" class="post-subtitle">
+                            Author name: {{item.author}}
+                        </h3>
+                        <p style="font-size: 80%;" class="post-meta">Description: {{item.description}}</p>
+                    </div>
+
+                    <div style="width: 20%; float:left  ">
+                        <p style="font-size: 80%;" class="post-meta"><em><strong>Price: {{item.price}} Eur</strong></em>
+                        </p>
+                    </div>
+
+                </div>
             </div>
-
-            <div style="width: 20%; float:left  ">
-                <p style="font-size: 80%;" class="post-meta"><em><strong>Price: {{item.price}} Eur</strong></em></p></div>
+            <hr>
+            {% endfor %}
 
         </div>
-    </div>
-    <hr>
-    {% endfor %}
+    </section>
 
 
-</div>
+    <section style="float: right ; " class="right">
+        <div style="border: 5px solid none;border-radius:15px;background-color:#e8f4f8;" class="check-out-box">
+
+            <h5 style="text-align:center;padding:1em "><em>Summary</em></h5>
+
+            <ul style="padding:2em">
+                <li style="display:flex;padding:3%">
+                    <p style="margin-right:210px">Books({{num_of_products}})</p>
+                    <p >{{total_sum}} Eur</p>
+
+                </li>
+                <hr>
+
+                <li style="display:flex;padding:3%">
+                    <p style="margin-right:120px">Price of transport:</p>
+                    <p > Free </p>
+
+                </li>
+                <hr>
+
+                <li style="display:flex;padding:3%">
+                    <button style="color: black" type="button" class="btn btn-outline-light">
+                        <a href="{{url_for('get_all_posts')}}" >Download invoice pdf</a>
+                    </button>
+                    <button style="color: black" type="button" class="btn btn-outline-light">
+                        <a href="{{url_for('get_all_posts')}}" >Finish order</a>
+                    </button>
+
+                </li>
+                <hr>
+
+
+            </ul>
+        </div>
+    </section>
+
+
+
+</section>
+{%else:%}
+
+    <h1 style="color:grey;text-align:center;"><em>At the moment, your cart is empty.</em> </h1>
+
+    {%endif%}
 
 {% include "footer.html" %}
 {% endblock %}

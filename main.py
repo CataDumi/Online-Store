@@ -20,7 +20,7 @@ db = SQLAlchemy(app)
 app.app_context().push()
 
 
-# Creez database pt carti
+# Table for books
 class Books(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(250))
@@ -31,12 +31,14 @@ class Books(db.Model):
     url = db.Column(db.String(250))
     description = db.Column(db.String(250))
 
-
+#Table for users
 class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(250))
     email = db.Column(db.String(250), unique=True)
     password = db.Column(db.String(250))
+
+#Table for user cart
 
 
 db.create_all()
@@ -59,7 +61,7 @@ def load_user(user_id):
 @app.route('/', methods=['GET', 'POST'])
 def get_all_posts():
     if request.method == 'GET':
-        preview = db.session.query(Books).all()[:2]  # ca sa vad doar primele cateva carti
+        preview = db.session.query(Books).all()[:3]  # ca sa vad doar primele cateva carti
     flash('You were successfully logged in')
     print(f'Logged in user ? {current_user.is_authenticated}')
     print(f'Current user: {current_user}')
@@ -190,9 +192,9 @@ def add_books():
         # aici vad tot ce se da add din add books
         # print(request.form['name'])
         # print(request.form['author'])
-        # print(request.form['quantity'])
-        # print(request.form['price'])
-        # print(request.form['rating'])
+        print(f"Quantity attr: {request.form['quantity'], type(request.form['quantity'])}")
+        print(f"Price attr: {request.form['price'], type(request.form['price'])}")
+        print(f"Rating attr:{request.form['rating'],type(request.form['rating'])}")
         # print(request.form['url'])
         # print(request.form['description'])
 
@@ -247,9 +249,11 @@ def add_to_cart(id):
 @login_required
 def cart_page():
     print(shop_cart)
+    total_sum=0
     for item in shop_cart:
         print(item.name)
-    return render_template('cart_page.html',cart=shop_cart)
+        total_sum+=item.price
+    return render_template('cart_page.html',cart=shop_cart,total_sum=total_sum,num_of_products=len(shop_cart))
 
 
 if __name__ == "__main__":
