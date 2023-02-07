@@ -10,8 +10,8 @@
         <div class="row">
             <div class="col-lg-8 col-md-10 mx-auto">
                 <div class="page-heading">
-                    <h1>Catalogue</h1>
-                    <span class="subheading">A large variety of items</span>
+                    <h2>It is always nice to look after a book.</h2>
+                    <span class="subheading">Take your time.</span>
                 </div>
             </div>
         </div>
@@ -28,10 +28,8 @@
 </ul>
 {% endif %}
 {% endwith %}
-<div class="container" >
 
-
-    {% for item in content %}
+<div class="container">
     <br>
     <div class="row"  style="display: inline-block;">
         <div  >
@@ -80,10 +78,5 @@
 
     </div>
     <hr>
-    {% endfor %}
-
-
-</div>
-
-{% include "footer.html" %}
-{% endblock %}
+        {% include "footer.html" %}
+        {% endblock %}

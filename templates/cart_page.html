@@ -80,11 +80,11 @@
                 <hr>
 
                 <li style="display:flex;padding:3%">
-                    <button style="color: black" type="button" class="btn btn-outline-light">
-                        <a href="{{url_for('get_all_posts')}}" >Download invoice pdf</a>
+                    <button name='pdf_button' style="color: black" type="button" class="btn btn-outline-light">
+                        <a href=" {{url_for('invoice_pdf',shop_cart=cart)}}"invoice.pdf">Download invoice pdf</a>
                     </button>
                     <button style="color: black" type="button" class="btn btn-outline-light">
-                        <a href="{{url_for('get_all_posts')}}" >Finish order</a>
+                        <a href="{{url_for('finish_order')}}" >Finish order</a>
                     </button>
 
                 </li>

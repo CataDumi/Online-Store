@@ -19,15 +19,6 @@
 
 <!-- Main Content -->
 <div class="container">
-    {% with messages = get_flashed_messages() %}
-    {% if messages %}
-    <ul style="text-align: center" class=flashes>
-        {% for message in messages %}
-        <p >{{ message }}</p>
-        {% endfor %}
-    </ul>
-    {% endif %}
-    {% endwith %}
     <div class="row">
         <div class="row">
             <div class="col-lg-8 col-md-10 mx-auto">
@@ -49,10 +40,10 @@
 
 
                 <!-- Buttons -->
-                <div class="clearfix">
-                    <a class="btn btn-primary float-right " href="/catalogue">View catalogue</a>
-                    <a class="btn btn-primary float-right mr-5" href="/add_books">Add books</a>
-                    <a class="btn btn-primary float-right mr-5" href="/">New pg</a>
+                <div class="clearfix" role="group">
+                    <a style="border-radius:10px" class="btn btn-primary float-left " href="/catalogue">View catalogue</a>
+                    <a style="border-radius:10px" class="btn btn-primary float-right" href="/add_books">Add books</a>
+
                 </div>
 
             </div>
