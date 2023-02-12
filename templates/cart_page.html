@@ -4,14 +4,14 @@
 
 
 <!-- Page Header -->
-<header class="masthead" style="background-image: url('{{ url_for('static', filename='img/catalogue.jpg')}}')">
+<header class="masthead" style="background-image: url('{{ url_for('static', filename='img/cart.jpg')}}')">
     <div class="overlay"></div>
     <div class="container">
         <div class="row">
             <div class="col-lg-8 col-md-10 mx-auto">
                 <div class="page-heading">
-                    <h1>Catalogue</h1>
-                    <span class="subheading">A large variety of items</span>
+                    <h1>Your cart</h1>
+                    <span class="subheading">Check one more time</span>
                 </div>
             </div>
         </div>
@@ -81,7 +81,7 @@
 
                 <li style="display:flex;padding:3%">
                     <button name='pdf_button' style="color: black" type="button" class="btn btn-outline-light">
-                        <a href=" {{url_for('invoice_pdf',shop_cart=cart)}}"invoice.pdf">Download invoice pdf</a>
+                        <a href=" {{url_for('invoice_pdf',shop_cart=cart)}}">Download invoice pdf</a>
                     </button>
                     <button style="color: black" type="button" class="btn btn-outline-light">
                         <a href="{{url_for('finish_order')}}" >Finish order</a>

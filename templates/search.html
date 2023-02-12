@@ -19,21 +19,11 @@
 </header>
 
 <!-- Main Content -->
-{% with messages = get_flashed_messages() %}
-{% if messages %}
-<ul class=flashes>
-    {% for message in messages %}
-    <p style="text-align:center">{{ message }}</p>
-    {% endfor %}
-</ul>
-{% endif %}
-{% endwith %}
-
 <div class="container">
     <br>
     <div class="row"  style="display: inline-block;">
-        <div  >
-
+        <div>
+            {% if not item == None: %}
             <div style="width: 40%; float:right; margin:10px;display: block;">
                 <img src="{{item.url}}" width="50%" height="50% "></div>
 
@@ -73,6 +63,10 @@
 
                 {% endif %}
             </div>
+
+            {%else:%}
+            <h1 style="color:grey;text-align:center;"><em>At the moment, the book you are looking for is not in stock.</em> </h1>
+            {%endif%}
 
         </div>
 
