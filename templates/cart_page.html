@@ -23,16 +23,16 @@
 <section style="display: flex">
 
 
-    <section style="float: left;overflow:hidden ;margin:40px;;" class="left">
-        <div class="container">
+    <section style="float: left;overflow:hidden ;margin:30px;" class="left">
+        <div style="margin:auto" class="container">
 
 
             {% for item in cart %}
             <br>
             <div class="row">
-                <div style="display: flex" class="col-lg-8 col-md-10 mx-auto">
+                <div style="display: flex margin:auto; " class="col-lg-8 col-md-10 mx-auto">
 
-                    <div style="width: 20%; float:left  ">
+                    <div style="width: 25%; float:left  ">
                         <img src="{{item.url}}" width="70%" height=175px></div>
 
                     <div style="width: 50%; float:right" class="post-preview">
@@ -59,7 +59,7 @@
     </section>
 
 
-    <section style="float: right ; " class="right">
+    <section style="float: right ; margin-right:30px " class="right">
         <div style="border: 5px solid none;border-radius:15px;background-color:#e8f4f8;" class="check-out-box">
 
             <h5 style="text-align:center;padding:1em "><em>Summary</em></h5>
@@ -73,7 +73,7 @@
                 <hr>
 
                 <li style="display:flex;padding:3%">
-                    <p style="margin-right:120px">Price of transport:</p>
+                    <p style="margin-right:120px">Price of shipping:</p>
                     <p > Free </p>
 
                 </li>

@@ -152,14 +152,6 @@ def edit(id):
     # Submit changes to db
     elif request.method == 'POST':
         if edit_form.validate_on_submit():
-            # print('POST')
-            # print(edit_form.name.data)
-            # print(edit_form.author.data)
-            # print(edit_form.quantity.data)
-            # print(edit_form.price.data)
-            # print(edit_form.rating.data)
-            # print(edit_form.description.data)
-
             # Enter new data in db
             edited_book = Books.query.filter_by(id=id).first()
             edited_book.name = edit_form.name.data
@@ -179,7 +171,7 @@ def edit(id):
 def add_books():
     add_book_form = BookForm()
     if request.method == 'POST':
-        # aici bag noua carte in db
+        # add a new book to the db
         if add_book_form.validate_on_submit():
             new_book = Books(name=add_book_form.name.data,
                              author=add_book_form.author.data,
@@ -222,10 +214,6 @@ def about():
 def contact():
     if request.method == 'POST':
         print('Contact-post')
-        # print(request.form['name'])
-        # print(request.form['email'])
-        # print(request.form['phone'])
-        # print(request.form['message'])
         send_email(name=request.form['name'], email=request.form['email'], phone=request.form['phone'],
                    message=request.form['message'], invoice=False)
     return render_template("contact.html")
@@ -244,7 +232,7 @@ def finish_order():
     # when the order is finished, clear the cart
     print(cart)
 
-    send_email(name=current_user.name,email=current_user.email,phone=None,message=None,invoice=True)
+    send_email(name=current_user.name, email=current_user.email, phone=None, message=None, invoice=True)
 
     for item in cart:
         db.session.delete(item)
@@ -352,7 +340,7 @@ def search():
             break
         else:
             result = None
-    return render_template('search.html', item=result,date=datetime.now().strftime("%d/%m/%Y"))
+    return render_template('search.html', item=result, date=datetime.now().strftime("%d/%m/%Y"))
 
 
 @app.route('/logout')
